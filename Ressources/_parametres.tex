@@ -1,9 +1,9 @@
 % classe du document
-\documentclass[10pt,a4paper]{report}
+\documentclass[11pt,a4paper]{report}
 
 % packages
 \usepackage[T1]{fontenc}
-\usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel} 
 \usepackage{lipsum}
@@ -20,12 +20,14 @@
 \usepackage{multicol} % pour creer des colonnes (multicol)
 \graphicspath{	{Ressources/images/}
 			{Ressources/Logos/}
-			{Ressources/Graphiques/}} % Chemin predefinit pour classer les images
+			{Ressources/Graphiques/}
+			{Ressources/Graphiques/Processus/}
+			{Ressources/Graphiques/SA13/}} % Chemin predefinit pour classer les images
 \DeclareGraphicsExtensions{.pdf,.png,.jpg} % declaration des extensions pour ne pas les ecrire tout le temps
 
 % style de mise en page
 \usepackage{geometry}
-\geometry{top=2.5cm, bottom=2.5cm,left=2.5cm, right=2.3cm}
+\geometry{top=2.5cm, bottom=2.5cm,left=2.3cm, right=2.3cm}
 \headheight = 20pt
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -86,9 +88,9 @@ identifierstyle=\normalfont,
 	language=c,
 	showspaces=false,
 	backgroundcolor=	\color{black},
-	basicstyle=		\color{white}\scriptsize, 
-	keywordstyle=		\color{white}, 
-	commentstyle=	\color{white}, 
+	basicstyle=		\color{green}\scriptsize, 
+	keywordstyle=		\color{green}, 
+	commentstyle=	\color{green}, 
 	stringstyle=		\color{white},
 	title=\lstname,
 	numbers = left, numberstyle=\tiny\color{black}

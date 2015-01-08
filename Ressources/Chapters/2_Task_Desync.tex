@@ -40,10 +40,10 @@ int main()
 
 Si on lance cette application et que l'on veut regarder sa consommation CPU :
 
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[frame=single,style=Console]
 $ top
 \end{lstlisting}
-Et voilà le résultat :
+\pagebreak Et voilà le résultat :
 
 
 \begin{center} 
@@ -85,7 +85,6 @@ int main()
 		perror("SIGALRM handler");
 		exit(EXIT_FAILURE);
 	}
-
 	//création d'un itimer pour générer le SIGALRM
 	struct itimerval aItimerval;
 	aItimerval.it_interval.tv_sec = 0;
@@ -97,8 +96,6 @@ int main()
 		perror("setitimer");
 		exit(EXIT_FAILURE);
 	}
-
-
 	//sleep du programme
 	while(1)
 	{
@@ -164,7 +161,7 @@ void safeSleep(int ns)
 }
 \end{lstlisting}
 
-Le résultat de ce nouveau programme (qui implémente exactement la même fonctionnalité que l'exemple précédent) est excellent. Voici sa consommation CPU :
+\pagebreak Le résultat de ce nouveau programme (qui implémente exactement la même fonctionnalité que l'exemple précédent) est excellent. Voici sa consommation CPU :
 
 \begin{center} 
 \hspace{12.45cm}
@@ -226,7 +223,6 @@ int main()
 	gpio = mmap(0, 256, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0xd6000000);
 	if(gpio==(void *)0xFFFFFFFF){printf("mmap failed, error: %i:%s \n",errno,strerror(errno)); return(-1);}
 	
-
 	// Thread creation
 	if(pthread_create(&muxThread,NULL,thread_mux,"Multiplexer Threads")<0)
 	{
@@ -238,7 +234,6 @@ int main()
 	{
 		perror("Seconds Thread");exit(-1);
 	}
-
 	(void) pthread_join(muxThread,&ret1);
 	(void) pthread_join(secThread,&ret2);
 
@@ -246,7 +241,7 @@ int main()
 }
 \end{lstlisting}
 
-Il n'y a pas beaucoup de commentaires à faire. Le code est très simple : la boucle principale instancie les 2 threads et attend  qu'il aient terminés. Les deux threads implémentent les fonctionnalités séparément.\\
+\pagebreak Il n'y a pas beaucoup de commentaires à faire. Le code est très simple : la boucle principale instancie les 2 threads et attend  qu'il aient terminés. Les deux threads implémentent les fonctionnalités séparément.\\
 
 
 Le résultat de cette implémentation est bien aussi, mais il est moins performant que le précédent. Il consomme un peu moins de 2\% de CPU.
@@ -258,9 +253,7 @@ Le résultat de cette implémentation est bien aussi, mais il est moins performa
 \newpage\section{Utilisation de FIFOs}
 Nous voilà arrivé à une partie intéressante. LE but est cette fois de faire communiquer les processus (et non des threads) en utilisant des FIFOs. Comme sur Linux tout est fichier, un FIFO est aussi un fichier.\\
 \subsection{FIFO en lecture}
-L'idée ici est toujours d'utiliser un timer pour gérer le multiplexage des afficheurs, mais cette fois la commande pour incrémenter le compteur est passé par un FIFO (histoire de voir comment fonctionne la communication inter-processus).\\
-
-Voilà le code exemple :
+L'idée ici est toujours d'utiliser un timer pour gérer le multiplexage des afficheurs, mais cette fois la commande pour incrémenter le compteur est passé par un FIFO (histoire de voir comment fonctionne la communication inter-processus).Voilà le code exemple :
 \begin{lstlisting}[frame=single,style=C]  % Start your code-block
 
 int main()
@@ -278,7 +271,6 @@ int main()
 		perror("mkfifo");
 		exit(EXIT_FAILURE);
 	}
-
 	//ouverture du FIFO en lecture
 	int fd_open_fifo;
 	fd_open_fifo = open(FIFO_NAME, O_RDONLY);
@@ -293,7 +285,6 @@ int main()
 		//lecture du FIFO
 		char str_fifo[STR_FIFO_LENGTH];
 		int n;
-
 		//sleep pour économiser le temps processeur
 		// car la fonction "read" s'est montrée non bloquante...
 		safeSleep(10000000);
@@ -301,23 +292,19 @@ int main()
 		n = read(fd_open_fifo, str_fifo, STR_FIFO_LENGTH);
 		str_fifo[n]='\0';
 
-
 		//analyse du contenu
 		if(strcmp(str_fifo, "PLUS\n") == 0)
 		{
-
 			if(gCounter == 99)
 				gCounter = 0;
 			else gCounter++;
 		}else if(strcmp(str_fifo, "MINUS\n") == 0)
 		{
-
 			if(gCounter == 0)
 				gCounter = 99;
 			else gCounter--;
 		}else if(strcmp(str_fifo, "NULL\n") == 0)
 		{
-
 			gCounter = 0;
 		}
 	}
@@ -405,7 +392,8 @@ int main()
 }
 \end{lstlisting}
 
-C'est très simple, on ouvre le fichier FIFO en écriture et on teste en boucle les boutons poussoir. Selon leurs états, on va écrire les différente commandes ("PLUS","MINUS" ou "NULL") dans le FIFO. Ce qui va faire changer la valeur du compteur.\\
+\pagebreak C'est très simple, on ouvre le fichier FIFO en écriture et on teste en boucle les boutons poussoir. Selon leurs états, on va écrire les différente commandes ("PLUS","MINUS" ou "NULL") dans le FIFO. Ce qui va faire changer la valeur du compteur.\\
+
 Voilà le résultat de ce test final :
 
 \begin{center} 
